@@ -1,0 +1,46 @@
+{
+  "name": "@cheese-grinder/stencil-component-config",
+  "version": "0.1.1",
+  "description": "Generate a component-config.d.ts for configure specifcs props in component during initialize of StencilJS app",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist/"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "author": "https://github.com/CheeseGrinder",
+  "keywords": [
+    "stencil",
+    "custom",
+    "custom-target-output",
+    "component",
+    "config"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/CheeseGrinder/stencil-component-config#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CheeseGrinder/stencil-component-config.git"
+  },
+  "bugs": {
+    "url": "https://github.com/CheeseGrinder/stencil-component-config/issues"
+  },
+  "scripts": {
+    "prebuild": "rm -rf ./dist ./build",
+    "build": "tsc -p . && rollup -c rollup.config.mjs",
+    "prettier": "prettier --cache 'src/**/*.ts' --write"
+  },
+  "peerDependencies": {
+    "@stencil/core": ">= 4.0.0"
+  },
+  "devDependencies": {
+    "@stencil/core": "^4.0.0",
+    "@types/node": "^20.11.30",
+    "prettier": "^3.2.5",
+    "rollup": "^4.13.0",
+    "typescript": "~5.0.0"
+  }
+}
