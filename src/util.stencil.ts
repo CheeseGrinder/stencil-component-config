@@ -1,9 +1,9 @@
-// CODE FROM STENCIlJS/CORE 
-
+// CODE FROM STENCIlJS/CORE
 
 import * as d from '@stencil/core/internal';
 import path, { dirname } from 'path';
 import ts from 'typescript';
+
 /**
  * Find all referenced types by a component and add them to the `importDataObj` parameter
  * @param importDataObj an output parameter that contains the imported types seen thus far by the compiler
@@ -25,9 +25,11 @@ export const updateReferenceTypeImports = (
   return cmp.properties
     .filter(prop => prop.docs.tags.some(tag => tag.name === 'config'))
     .filter(prop => prop.complexType?.references)
-    .reduce((typesImportData: d.TypesImportData, cmpProp) => (
-      updateImportReferences(typesImportData, cmpProp.complexType.references)
-    ), importDataObj);
+    .reduce(
+      (typesImportData: d.TypesImportData, cmpProp) =>
+        updateImportReferences(typesImportData, cmpProp.complexType.references),
+      importDataObj,
+    );
 };
 
 /**
@@ -41,7 +43,6 @@ type ImportReferenceUpdater = (
   existingTypeImportData: d.TypesImportData,
   typeReferences: { [key: string]: d.ComponentCompilerTypeReference },
 ) => d.TypesImportData;
-
 
 /**
  * Factory function to create an `ImportReferenceUpdater` instance
@@ -76,7 +77,7 @@ const updateImportReferenceFactory = (
     typeReferences: { [key: string]: d.ComponentCompilerTypeReference },
   ): d.TypesImportData => {
     Object.keys(typeReferences)
-      .map<[string, d.ComponentCompilerTypeReference]>((typeName) => {
+      .map<[string, d.ComponentCompilerTypeReference]>(typeName => {
         return [typeName, typeReferences[typeName]];
       })
       .forEach(([typeName, typeReference]) => {
@@ -117,7 +118,7 @@ const updateImportReferenceFactory = (
         existingTypeImportData[importResolvedFile] = existingTypeImportData[importResolvedFile] || [];
 
         // If this file already has a reference to this type move on
-        if (existingTypeImportData[importResolvedFile].find((df) => df.localName === typeName)) {
+        if (existingTypeImportData[importResolvedFile].find(df => df.localName === typeName)) {
           return;
         }
 
@@ -149,7 +150,6 @@ export function resolve(...paths: string[]): string {
    */
   return normalizePath(path.resolve(...paths), false);
 }
-
 
 /**
  * Convert Windows backslash paths to slash paths: foo\\bar ➔ foo/bar
@@ -267,13 +267,11 @@ const enum CharacterCodes {
   slash = 0x2f, // /
 }
 
-
 const normalizeSlashes = (path: string) => path.replace(backslashRegExp, '/');
 
 const altDirectorySeparator = '\\';
 const urlSchemeSeparator = '://';
 const backslashRegExp = /\\/g;
-
 
 const isVolumeCharacter = (charCode: number) =>
   (charCode >= CharacterCodes.a && charCode <= CharacterCodes.z) ||

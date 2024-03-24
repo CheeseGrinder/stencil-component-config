@@ -1,9 +1,9 @@
 import { BuildCtx, ComponentCompilerProperty, TypesImportData, ValidatedConfig } from '@stencil/core/internal';
-import { normalizePath, relative, sortImportNames, updateReferenceTypeImports,  } from './components-config.stencil'
+import { normalizePath, relative, sortImportNames, updateReferenceTypeImports } from './util.stencil';
 import { isAbsolute } from 'path';
 
 export function hasConfigProp(prop: ComponentCompilerProperty): boolean {
-  return prop.docs.tags.some(tag => tag.name === 'config')
+  return prop.docs.tags.some(tag => tag.name === 'config');
 }
 
 export function typeImportData(config: ValidatedConfig, { components }: BuildCtx) {
@@ -11,11 +11,12 @@ export function typeImportData(config: ValidatedConfig, { components }: BuildCtx
 
   const importTypeData = components
     .filter(c => !c.isCollectionDependency)
-    .reduce((importType, comp) => (
-      updateReferenceTypeImports(importType, allTypes, comp, comp.sourceFilePath, config)
-    ), {} as TypesImportData);
+    .reduce(
+      (importType, comp) => updateReferenceTypeImports(importType, allTypes, comp, comp.sourceFilePath, config),
+      {} as TypesImportData,
+    );
 
-   return Object.keys(importTypeData).map(filePath => {
+  return Object.keys(importTypeData).map(filePath => {
     const typeData = importTypeData[filePath];
 
     let importFilePath = filePath;
