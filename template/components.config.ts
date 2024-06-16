@@ -1,8 +1,4 @@
-declare global {
-  export namespace Configuration {
-    interface ComponentsConfig {}
-  }
-}
+import { Configuration } from '@cheese-grinder/stencil-component-config';
 
 type Options = Configuration.ComponentsConfig;
 
@@ -21,7 +17,6 @@ export class ComponentConfig {
     return this.config.get(component) ?? fallback;
   }
 
-  apply(ref: any, tag: string, defaultValue: Record<string, any>): void;
   apply<Tag extends keyof Options>(ref: any, tag: Tag, defaultValue: Options[Tag] & Record<string, any>): void {
     const component = this.get(tag);
     const uniqueKeys = new Set([...Object.keys(component!), ...Object.keys(defaultValue)]);
@@ -50,5 +45,3 @@ export class ComponentConfig {
     return config![prop] ?? (fallback as Options[Tag][Prop]);
   }
 }
-
-export const componentConfig = new ComponentConfig();

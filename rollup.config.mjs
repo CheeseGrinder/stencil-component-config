@@ -17,5 +17,12 @@ export default {
       file: pkg.module,
     },
   ],
-  external: ['@stencil/core']
+  external: [
+    '@stencil/core/cli',
+    '@stencil/core/compiler',
+    'fs',
+    'fs/promises',
+    'path',
+    'typescript',
+  ]
 };

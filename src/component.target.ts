@@ -4,6 +4,7 @@ import { BuildCtx, CompilerCtx, Config, JsonDocs, OutputTargetCustom } from '@st
 import { writeFileSync } from 'fs';
 import { join } from 'path';
 import { hasConfigProp, typeImportData } from './util';
+import { isSingleQuoteUsed } from './prettier.config';
 
 interface ComponentConfigOptions {
   /**
@@ -28,6 +29,9 @@ export function componentConfigTarget(options?: ComponentConfigOptions): OutputT
 }
 
 async function generateDts(options: ComponentConfigOptions, config: Config, buildCtx: BuildCtx) {
+  const useSingleQuote = await isSingleQuoteUsed();
+  const QUOTE = useSingleQuote ? `'` : `"`;
+  const quote = (text: string) => `${QUOTE}${text}${QUOTE}`;
   const content: string[] = [
     '/* eslint-disable */',
     '/* tslint:disable */',
@@ -49,29 +53,26 @@ async function generateDts(options: ComponentConfigOptions, config: Config, buil
   types.forEach(type => content.push(`import ${type}`));
   content.push('');
 
-  content.push('declare global {');
-  content.push('  export namespace Configuration {');
-  content.push('    interface ComponentsConfig {');
+  content.push('declare namespace Components {'); // Override stencil Components namespace
+  content.push('  interface ComponentsConfig {');
   buildCtx.components.forEach(component => {
     const props = component.properties.filter(hasConfigProp);
     if (props.length === 0) {
       return;
     }
-
     const tagName = options.prefix === false ? component.tagName.split('-').splice(1).join('-') : component.tagName;
-    content.push(`      "${tagName}"?: {`);
+    content.push(`    ${quote(tagName)}?: {`);
 
     props.forEach(prop => {
       if (prop.docs.text) {
-        content.push('        /**');
-        prop.docs.text.split(/[\r\n]+/).forEach(line => content.push(`         * ${line}`));
-        content.push('         */');
+        content.push('      /**');
+        prop.docs.text.split(/[\r\n]+/).forEach(line => content.push(`       * ${line}`));
+        content.push('       */');
       }
-      content.push(`        ${prop.name}?: ${prop.complexType.original};`);
+      content.push(`      ${prop.name}?: ${prop.complexType.original};`);
     });
-    content.push('      }');
+    content.push('    }');
   });
-  content.push('    }');
   content.push('  }');
   content.push('}');
 

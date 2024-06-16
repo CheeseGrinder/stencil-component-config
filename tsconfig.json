@@ -16,6 +16,8 @@
     "noImplicitReturns": true,
     "noUnusedLocals": false,
     "noUnusedParameters": true,
+    "baseUrl": ".",
+    "rootDir": "./src",
     "outDir": "build",
     "declarationDir": "dist",
     "pretty": true,
