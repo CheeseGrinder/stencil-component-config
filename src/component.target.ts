@@ -53,7 +53,7 @@ async function generateDts(options: ComponentConfigOptions, config: Config, buil
   types.forEach(type => content.push(`import ${type}`));
   content.push('');
 
-  content.push('declare namespace Components {'); // Override stencil Components namespace
+  content.push('export namespace Configuration {');
   content.push('  interface ComponentsConfig {');
   buildCtx.components.forEach(component => {
     const props = component.properties.filter(hasConfigProp);
