@@ -21,18 +21,17 @@ jobs:
     uses: ./.github/workflows/audit.yml
 
   quality:
+    needs: audit
     uses: ./.github/workflows/quality.yml
 
   build:
+    needs: quality
     uses: ./.github/workflows/build.yml
 
   publish:
-    needs:
-      - audit
-      - quality
-      - build
+    needs: build
     runs-on: ubuntu-latest
-    name: Update version in package.json
+    name: Publish
     permissions:
       # Give the default GITHUB_TOKEN write permission to commit and push the changed files back to the repository.
       contents: write
