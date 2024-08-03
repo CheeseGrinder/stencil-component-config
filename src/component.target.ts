@@ -1,10 +1,10 @@
 import { parseFlags } from '@stencil/core/cli';
 import { loadConfig } from '@stencil/core/compiler';
-import { BuildCtx, CompilerCtx, Config, JsonDocs, OutputTargetCustom } from '@stencil/core/internal';
+import { BuildCtx, Config, OutputTargetCustom } from '@stencil/core/internal';
 import { writeFileSync } from 'fs';
 import { join } from 'path';
-import { hasConfigProp, typeImportData } from './util';
 import { isSingleQuoteUsed } from './prettier.config';
+import { hasConfigProp, typeImportData } from './util';
 
 interface ComponentConfigOptions {
   /**
@@ -19,7 +19,7 @@ export function componentConfigTarget(options?: ComponentConfigOptions): OutputT
   return {
     type: 'custom',
     name: 'component-option',
-    async generator(config: Config, _compilerCtx: CompilerCtx, buildCtx: BuildCtx, _docs: JsonDocs) {
+    async generator(config, _compilerCtx, buildCtx) {
       const parsedOptions = options || ({} as ComponentConfigOptions);
       const content = await generateDts(parsedOptions, config, buildCtx);
 

@@ -1,0 +1,41 @@
+# Dependency Review Action
+#
+# This Action will scan dependency manifest files that change as part of a Pull Request,
+# surfacing known-vulnerable versions of the packages declared or updated in the PR.
+# Once installed, if the workflow run is marked as required, PRs introducing known-vulnerable
+# packages will be blocked from merging.
+#
+# Source repository: https://github.com/actions/dependency-review-action
+# Public documentation: https://docs.github.com/en/code-security/supply-chain-security/understanding-your-software-supply-chain/about-dependency-review#dependency-review-enforcement
+name: Audit
+
+on:
+  workflow_call:
+  push:
+    paths-ignore:
+      - '.github/**'
+      - '!.github/workflows/**'
+      - '.husky/**'
+      - 'assets/**'
+    branches-ignore:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+
+permissions:
+  contents: read
+  # Write permissions for pull-requests are required for using the `comment-summary-in-pr` option, comment out if you aren't using this option
+  pull-requests: write
+
+jobs:
+  audit-dependencies:
+    name: Audit dependencies
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Audit
+        run: npx audit-ci@latest --config ./audit-ci.json

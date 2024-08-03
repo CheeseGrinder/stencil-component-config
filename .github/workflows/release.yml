@@ -1,0 +1,69 @@
+# This workflow will run tests using node and then publish a package to GitHub Packages when a release is created
+# For more information see: https://docs.github.com/en/actions/publishing-packages/publishing-nodejs-packages
+
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Release type
+        required: false
+        type: choice
+        default: patch
+        options:
+          - patch
+          - minor
+          - major
+
+jobs:
+  audit:
+    uses: ./.github/workflows/audit.yml
+
+  quality:
+    uses: ./.github/workflows/quality.yml
+
+  build:
+    uses: ./.github/workflows/build.yml
+
+  publish:
+    needs:
+      - audit
+      - quality
+      - build
+    runs-on: ubuntu-latest
+    name: Update version in package.json
+    permissions:
+      # Give the default GITHUB_TOKEN write permission to commit and push the changed files back to the repository.
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Bump version
+        id: version
+        uses: KageKirin/bump-node-package-version@v1.0.0
+        with:
+          major: ${{ github.event.inputs.version == 'major' }}
+          minor: ${{ github.event.inputs.version == 'minor' }}
+          patch: ${{ github.event.inputs.version == 'patch' }}
+
+      - name: Commit & tag version
+        uses: EndBug/add-and-commit@v9
+        with:
+          author_name: cheese_grinder_ci
+          author_email: contact@cheese-grinder.fr
+          committer_name: cheese_grinder_ci
+          committer_email: contact@cheese-grinder.fr
+          message: "ci(version): bump to ${{ steps.version.outputs.version }}"
+          tag: "v${{ steps.version.outputs.version }}"
+
+      - name: npm
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: https://registry.npmjs.org/
+      - run: npm ci
+      - run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
