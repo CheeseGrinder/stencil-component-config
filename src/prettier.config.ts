@@ -16,7 +16,7 @@ interface PrettierOverride {
  * Read the .prettierrc file config to match your style config
  */
 export async function isSingleQuoteUsed(): Promise<boolean> {
-  const file = await readFile(join(process.cwd(), '.prettierrc'), { encoding: 'utf-8' });
+  const file = await readFile(join(process.cwd(), '.prettierrc'), { encoding: 'utf-8' }).catch(() => '{}');
   const config: PrettierConfig = JSON.parse(file);
   const singleQuote: boolean =
     config.overrides?.find(override => override.files === '*.d.ts' || override.files === '*.ts')?.options.singleQuote ??
