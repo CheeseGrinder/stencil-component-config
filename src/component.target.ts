@@ -1,9 +1,9 @@
 import { parseFlags } from '@stencil/core/cli';
 import { loadConfig } from '@stencil/core/compiler';
 import { BuildCtx, Config, OutputTargetCustom } from '@stencil/core/internal';
-import { writeFileSync } from 'fs';
-import { join } from 'path';
-import { isSingleQuoteUsed } from './prettier.config';
+import { writeFileSync } from 'node:fs';
+import { join } from 'node:path';
+import { parseConfig } from './config-parser';
 import { hasConfigProp, typeImportData } from './util';
 
 interface ComponentConfigOptions {
@@ -29,9 +29,13 @@ export function componentConfigTarget(options?: ComponentConfigOptions): OutputT
 }
 
 async function generateDts(options: ComponentConfigOptions, config: Config, buildCtx: BuildCtx) {
-  const useSingleQuote = await isSingleQuoteUsed();
-  const QUOTE = useSingleQuote ? `'` : `"`;
+  const styleConfig = await parseConfig();
+  const QUOTE = styleConfig.isSingleQuote ? `'` : `"`;
   const quote = (text: string) => `${QUOTE}${text}${QUOTE}`;
+  const semi = styleConfig.useSemi ? ';' : '';
+  const indentStyle = styleConfig.tabIndent ? '\t' : Array(styleConfig.tabSize).fill(' ').join('');
+  const indent = (size: number) => Array(size).fill(indentStyle).join('');
+
   const content: string[] = [
     '/* eslint-disable */',
     '/* tslint:disable */',
@@ -50,30 +54,30 @@ async function generateDts(options: ComponentConfigOptions, config: Config, buil
     sys: config.sys,
   });
   const types = typeImportData(validated.config, buildCtx);
-  types.forEach(type => content.push(`import ${type}`));
+  types.forEach(type => content.push(`import type ${type}`));
   content.push('');
 
   content.push('export namespace Configuration {');
-  content.push('  interface ComponentsConfig {');
+  content.push(`${indent(1)}interface ComponentsConfig {`);
   buildCtx.components.forEach(component => {
     const props = component.properties.filter(hasConfigProp);
     if (props.length === 0) {
       return;
     }
     const tagName = options.prefix === false ? component.tagName.split('-').splice(1).join('-') : component.tagName;
-    content.push(`    ${quote(tagName)}?: {`);
+    content.push(`${indent(2)}${quote(tagName)}?: {`);
 
     props.forEach(prop => {
       if (prop.docs.text) {
-        content.push('      /**');
-        prop.docs.text.split(/[\r\n]+/).forEach(line => content.push(`       * ${line}`));
-        content.push('       */');
+        content.push(`${indent(3)}/**`);
+        prop.docs.text.split(/[\r\n]+/).forEach(line => content.push(`${indent(3)} * ${line}`));
+        content.push(`${indent(3)} */`);
       }
-      content.push(`      ${prop.name}?: ${prop.complexType.original};`);
+      content.push(`${indent(3)}${prop.name}?: ${prop.complexType.original}${semi}`);
     });
-    content.push('    }');
+    content.push(`${indent(2)}}${semi}`);
   });
-  content.push('  }');
+  content.push(`${indent(1)}}`);
   content.push('}');
 
   return content.join('\n');
