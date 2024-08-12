@@ -11,13 +11,11 @@ on:
       - '!.github/workflows/**'
       - '.husky/**'
       - 'assets/**'
-    branches-ignore:
-      - main
-      - develop
+    branches:
+        - main
   pull_request:
     branches:
       - main
-      - develop
 
 jobs:
   build-package:
