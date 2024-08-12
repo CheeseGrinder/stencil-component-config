@@ -1,6 +1,7 @@
 # Todo
-- [] Workflow only on push on main
-- [] Workflow only on PR on main
+- [x] Workflow only on push on main
+- [x] Workflow only on PR on main
 - [] remove husky by native githooks
-- [] find a ways to clone template files in project files after install
+- [x] find a ways to clone template files in project files after install
 - [] migrate from prettier & eslint to biome
+- [] replace ci update version by node version upgrade

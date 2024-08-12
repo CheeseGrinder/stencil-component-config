@@ -1,7 +1,7 @@
 // CODE FROM STENCIlJS/CORE
 
 import * as d from '@stencil/core/internal';
-import path, { dirname } from 'path';
+import path, { dirname } from 'node:path';
 import ts from 'typescript';
 
 /**

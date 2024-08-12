@@ -20,9 +20,9 @@ export default {
   external: [
     '@stencil/core/cli',
     '@stencil/core/compiler',
-    'fs',
-    'fs/promises',
-    'path',
+    'node:fs',
+    'node:fs/promises',
+    'node:path',
     'typescript',
   ]
 };

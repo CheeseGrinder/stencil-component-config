@@ -31,7 +31,7 @@
     "url": "https://github.com/CheeseGrinder/stencil-component-config/issues"
   },
   "scripts": {
-    "postinstall": "node scripts/post-install.js",
+    "postinstall": "node scripts/post-install",
     "prebuild": "rm -rf ./dist ./build ./config",
     "build": "tsc -p . && rollup -c rollup.config.mjs",
     "format": "prettier ./src/**/*.ts --check",

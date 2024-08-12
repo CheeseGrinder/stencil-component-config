@@ -1,6 +1,6 @@
 import { BuildCtx, ComponentCompilerProperty, TypesImportData, ValidatedConfig } from '@stencil/core/internal';
 import { normalizePath, relative, sortImportNames, updateReferenceTypeImports } from './util.stencil';
-import { isAbsolute } from 'path';
+import { isAbsolute } from 'node:path';
 
 export function hasConfigProp(prop: ComponentCompilerProperty): boolean {
   return prop.docs.tags.some(tag => tag.name === 'config');
