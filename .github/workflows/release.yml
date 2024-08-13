@@ -68,12 +68,12 @@ jobs:
       - name: Bump version
         if: inputs.preid == ' '
         run: |
-          npm version ${{ inputs.version }} -m "ci(version): bump to %s"
+          version=$(npm version ${{ inputs.version }} -m "ci(version): bump to %s")
 
       - name: Bump preversion
         if: inputs.preid != ' '
         run: |
-          npm version ${{ inputs.version }} --preid=${{ inputs.preid }} -m "ci(version): bump to %s"
+          version=$(npm version ${{ inputs.version }} --preid=${{ inputs.preid }} -m "ci(version): bump to %s")
 
       - name: Publish
         run: |
@@ -84,5 +84,8 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       # Push only if the package as been published on registry
-      - name: Push Commit
-        run: git push
+      - name: Commit & Tag
+        run: |
+          git tag $version
+          git push
+
