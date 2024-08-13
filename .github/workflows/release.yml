@@ -20,12 +20,11 @@ on:
           - prepatch
           - prerelease
       preid:
-        description: Release type
+        description: Pre-id
         required: false
         type: choice
-        default: patch
         options:
-          - ' '
+          - ''
           - dev
           - alpha
           - beta
