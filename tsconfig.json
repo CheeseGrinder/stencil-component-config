@@ -4,10 +4,7 @@
     "alwaysStrict": true,
     "declaration": true,
     "forceConsistentCasingInFileNames": true,
-    "lib": [
-      "es2015",
-      "dom"
-    ],
+    "lib": ["es2015", "dom"],
     "esModuleInterop": true,
     "module": "es2015",
     "target": "es2017",
@@ -21,9 +18,7 @@
     "outDir": "build",
     "declarationDir": "dist",
     "pretty": true,
-    "removeComments": false,
+    "removeComments": false
   },
-  "files": [
-    "src/index.ts"
-  ]
+  "files": ["src/index.ts"]
 }

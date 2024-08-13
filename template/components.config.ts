@@ -1,3 +1,4 @@
+// @ts-ignore
 import type { Configuration } from 'src/components-config';
 
 type Config = Configuration.ComponentsConfig;
@@ -45,3 +46,5 @@ export class ComponentConfig {
     return config![prop] ?? (fallback as Config[Tag][Prop]);
   }
 }
+
+export const componentConfig = new ComponentConfig();

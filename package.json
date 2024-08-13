@@ -5,22 +5,12 @@
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
-  "files": [
-    "dist/",
-    "scripts/",
-    "template/"
-  ],
+  "files": ["dist/", "scripts/", "template/"],
   "publishConfig": {
     "access": "public"
   },
   "author": "https://github.com/CheeseGrinder",
-  "keywords": [
-    "stencil",
-    "custom",
-    "custom-target-output",
-    "component",
-    "config"
-  ],
+  "keywords": ["stencil", "custom", "custom-target-output", "component", "config"],
   "license": "MIT",
   "homepage": "https://github.com/CheeseGrinder/stencil-component-config#readme",
   "repository": {
@@ -34,13 +24,14 @@
     "postinstall": "node scripts/post-install",
     "prebuild": "rm -rf ./dist ./build ./config",
     "build": "tsc -p . && rollup -c rollup.config.mjs",
-    "format": "prettier ./src/**/*.ts --check",
-    "format:fix": "prettier ./src/**/*.ts --write",
-    "lint": "eslint \"src/**/*.ts\"",
-    "lint:fix": "eslint \"src/**/*.ts\" --fix",
+    "format": "biome format",
+    "format:fix": "biome format --fix",
+    "lint": "biome lint",
+    "lint:fix": "biome lint --fix",
     "prepare": "husky"
   },
   "devDependencies": {
+    "@biomejs/biome": "^1.8.3",
     "@commitlint/cli": "^19.3.0",
     "@commitlint/config-conventional": "^19.2.2",
     "@stencil/core": "~4.18.3",

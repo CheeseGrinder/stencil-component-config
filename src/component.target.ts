@@ -1,8 +1,8 @@
+import { writeFileSync } from 'node:fs';
+import { join } from 'node:path';
 import { parseFlags } from '@stencil/core/cli';
 import { loadConfig } from '@stencil/core/compiler';
 import { BuildCtx, Config, OutputTargetCustom } from '@stencil/core/internal';
-import { writeFileSync } from 'node:fs';
-import { join } from 'node:path';
 import { parseConfig } from './config-parser';
 import { hasConfigProp, typeImportData } from './util';
 

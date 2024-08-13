@@ -1,13 +1,12 @@
-import { existsSync } from "node:fs";
-import { join } from "node:path";
-import { parseBiomeConfig } from "./parser/biome";
-import { parsePrettierConfig } from "./parser/prettier";
-import { ConfigType, type StyleConfig } from "./types/config";
-
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
+import { parseBiomeConfig } from './parser/biome';
+import { parsePrettierConfig } from './parser/prettier';
+import { ConfigType, type StyleConfig } from './types/config';
 
 export async function parseConfig(): Promise<StyleConfig> {
   const configType = getConfigType();
-  return getConfig(configType)
+  return getConfig(configType);
 }
 
 function getConfigType(): ConfigType {
@@ -51,4 +50,3 @@ async function getConfig(type: ConfigType): Promise<StyleConfig> {
       };
   }
 }
-
