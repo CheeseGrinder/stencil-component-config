@@ -86,6 +86,7 @@ jobs:
       # Push only if the package as been published on registry
       - name: Commit & Tag
         run: |
-          git tag $version
           git push
+          git tag $version
+          git push origin $version
 

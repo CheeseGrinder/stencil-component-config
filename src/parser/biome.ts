@@ -30,29 +30,29 @@ async function retriveExtendsConfig(...paths: string[]): Promise<Biome[]> {
 }
 
 function isSingleQuote(configs: Biome[]): boolean {
-  return configs.some(
+  return configs?.some(
     config =>
       config.override
         ?.filter(override => override.include.some(file => FILE_PATTERN.test(file)))
         .some(override => override.javascript?.formatter.quoteStyle === 'single') ||
       config.javascript?.formatter.quoteStyle === 'single' ||
       isSingleQuote(config.extends as Biome[]),
-  );
+  ) || false;
 }
 
 function useSemi(configs: Biome[]): boolean {
-  return configs.some(
+  return configs?.some(
     config =>
       config.override
         ?.filter(override => override.include.some(file => FILE_PATTERN.test(file)))
         .some(override => override.javascript?.formatter.semicolons === 'always') ||
       config.javascript?.formatter.semicolons === 'always' ||
       useSemi(config.extends as Biome[]),
-  );
+  ) || false;
 }
 
 function useTabs(configs: Biome[]): boolean {
-  return configs.some(
+  return configs?.some(
     config =>
       config.override
         ?.filter(override => override.include.some(file => FILE_PATTERN.test(file)))
@@ -62,13 +62,13 @@ function useTabs(configs: Biome[]): boolean {
       config.javascript?.formatter.indentStyle === 'tab' ||
       config.formatter?.indentStyle === 'tab' ||
       useTabs(config.extends as Biome[]),
-  );
+  ) || false;
 }
 
 function indentSize(configs: Biome[]): number {
   return (
     configs
-      .map(config => {
+      ?.map(config => {
         const overrideSize = config.override
           ?.filter(override => override.include.some(file => FILE_PATTERN.test(file)))
           .filter(
