@@ -1,16 +1,26 @@
 {
   "name": "@cheese-grinder/stencil-component-config",
-  "version": "0.2.3-beta.1",
+  "version": "0.3.0-beta.0",
   "description": "Generate a component-config.d.ts for configure specifcs props in component during initialize of StencilJS app",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
-  "files": ["dist/", "scripts/", "template/"],
+  "files": [
+    "dist/",
+    "scripts/",
+    "template/"
+  ],
   "publishConfig": {
     "access": "public"
   },
   "author": "https://github.com/CheeseGrinder",
-  "keywords": ["stencil", "custom", "custom-target-output", "component", "config"],
+  "keywords": [
+    "stencil",
+    "custom",
+    "custom-target-output",
+    "component",
+    "config"
+  ],
   "license": "MIT",
   "homepage": "https://github.com/CheeseGrinder/stencil-component-config#readme",
   "repository": {
