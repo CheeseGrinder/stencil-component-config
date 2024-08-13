@@ -2,7 +2,7 @@ export interface Biome {
   extends: string[] | Biome[];
   formatter?: BiomeFormatter;
   javascript?: BiomeJavascript;
-  override: BiomeOverride[];
+  override?: BiomeOverride[];
 }
 
 interface BiomeFormatter {
