@@ -12,9 +12,24 @@ on:
         type: choice
         default: patch
         options:
-          - patch
-          - minor
           - major
+          - minor
+          - patch
+          - premajor
+          - preminor
+          - prepatch
+          - prerelease
+      preid:
+        description: Release type
+        required: false
+        type: choice
+        default: patch
+        options:
+          - ' '
+          - dev
+          - alpha
+          - beta
+          - rc
 
 jobs:
   audit:
@@ -39,31 +54,35 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Bump version
-        id: version
-        uses: KageKirin/bump-node-package-version@v1.0.0
-        with:
-          major: ${{ github.event.inputs.version == 'major' }}
-          minor: ${{ github.event.inputs.version == 'minor' }}
-          patch: ${{ github.event.inputs.version == 'patch' }}
+      - name: Setup Git
+        run: |
+          git config user.name "Cheese Grinder CI"
+          git config user.email "<>"
 
-      - name: Commit & tag version
-        uses: EndBug/add-and-commit@v9
-        with:
-          author_name: cheese_grinder_ci
-          author_email: contact@cheese-grinder.fr
-          committer_name: cheese_grinder_ci
-          committer_email: contact@cheese-grinder.fr
-          message: "ci(version): bump to ${{ steps.version.outputs.version }}"
-          tag: "v${{ steps.version.outputs.version }}"
-
-      - name: npm
+      - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 20
           registry-url: https://registry.npmjs.org/
-      - run: npm ci
-      - run: npm run build --if-present
-      - run: npm publish
+
+      - name: Bump version
+        if: inputs.preid == ' '
+        run: |
+          npm version ${{ inputs.version }} -m "ci(version): bump to %s"
+
+      - name: Bump preversion
+        if: inputs.preid != ' '
+        run: |
+          npm version ${{ inputs.version }} --preid=${{ inputs.preid }} -m "ci(version): bump to %s"
+
+      - name: Publish
+        run: |
+          npm ci
+          npm run build --if-present
+          npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      # Push only if the package as been published on registry
+      - name: Push Commit
+        run: git push
