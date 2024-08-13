@@ -1,6 +1,6 @@
 {
   "name": "@cheese-grinder/stencil-component-config",
-  "version": "0.3.0-beta.2",
+  "version": "0.3.0",
   "description": "Generate a component-config.d.ts for configure specifcs props in component during initialize of StencilJS app",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
