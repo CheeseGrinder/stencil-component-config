@@ -71,6 +71,16 @@ async function generateDts(options: ComponentConfigOptions, config: Config, buil
       if (prop.docs.text) {
         content.push(`${indent(3)}/**`);
         prop.docs.text.split(/[\r\n]+/).forEach(line => content.push(`${indent(3)} * ${line}`));
+
+        prop.docs.tags
+          .filter(tag => tag.name !== 'config')
+          .forEach(tag => {
+            tag.text
+              ? content.push(`${indent(3)} * @${tag.name} ${tag.text}`)
+              : content.push(`${indent(3)} * @${tag.name}`);
+          });
+
+        prop.docs.tags.forEach(tag => content.push(`${indent(3)} * @${tag.name}`));
         content.push(`${indent(3)} */`);
       }
       content.push(`${indent(3)}${prop.name}?: ${prop.complexType.original}${semi}`);

@@ -1,9 +1,13 @@
-# Core
-cd packages/core
-npm run format
-npm run lint
+#!/bin/bash
 
-# Vue
-cd ../vue
-npm run format
-npm run lint
+function check() {
+    npx @biomejs/biome $1
+
+    if (($? != 0)); then
+        echo "Forgot to run $2 ?"
+        exit 1
+    fi
+}
+
+check "format"
+check "lint"

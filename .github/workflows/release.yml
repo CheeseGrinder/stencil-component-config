@@ -65,14 +65,12 @@ jobs:
           registry-url: https://registry.npmjs.org/
 
       - name: Bump version
-        if: inputs.preid == ' '
-        run: |
-          version=$(npm version ${{ inputs.version }} -m "ci(version): bump to %s")
-
-      - name: Bump preversion
-        if: inputs.preid != ' '
-        run: |
-          version=$(npm version ${{ inputs.version }} --preid=${{ inputs.preid }} -m "ci(version): bump to %s")
+        id: bump
+        uses: CheeseGrinder/node-version-bumper@v1.1
+        with:
+          version: ${{ inputs.version }}
+          preid: ${{ inputs.preid }}
+          commiter-name: Cheese Grinder CI
 
       - name: Publish
         run: |
@@ -86,6 +84,6 @@ jobs:
       - name: Commit & Tag
         run: |
           git push
-          git tag v$version
-          git push origin tag v$version
+          git tag ${{ steps.bump.outputs.version }}
+          git push origin tag ${{ steps.bump.outputs.version }}
 
