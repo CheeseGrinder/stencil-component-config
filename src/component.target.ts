@@ -74,13 +74,10 @@ async function generateDts(options: ComponentConfigOptions, config: Config, buil
 
         prop.docs.tags
           .filter(tag => tag.name !== 'config')
-          .forEach(tag => {
-            tag.text
-              ? content.push(`${indent(3)} * @${tag.name} ${tag.text}`)
-              : content.push(`${indent(3)} * @${tag.name}`);
-          });
+          .forEach(tag =>
+            content.push(tag.text ? `${indent(3)} * @${tag.name} ${tag.text}` : `${indent(3)} * @${tag.name}`),
+          );
 
-        prop.docs.tags.forEach(tag => content.push(`${indent(3)} * @${tag.name}`));
         content.push(`${indent(3)} */`);
       }
       content.push(`${indent(3)}${prop.name}?: ${prop.complexType.original}${semi}`);
